@@ -34,7 +34,7 @@ func (ur *PacienteRepository) GetAll(ctx context.Context) ([]paciente.Paciente, 
 	return pacientes, nil
 }
 
-func (ur *PacienteRepository) GetOne(ctx context.Context, id uint) (paciente.Paciente, error) {
+func (ur *PacienteRepository) GetOne(ctx context.Context, id string) (paciente.Paciente, error) {
 	q := `
     SELECT id_p, nombre, apellido, fecha_nac, direccion, telefono
         FROM paciente
@@ -53,7 +53,7 @@ func (ur *PacienteRepository) GetOne(ctx context.Context, id uint) (paciente.Pac
 	return p, nil
 }
 
-func (ur *PacienteRepository) GetByPacientename(ctx context.Context, nombre string) (paciente.Paciente, error) {
+func (ur *PacienteRepository) GetByPacientenombre(ctx context.Context, nombre string) (paciente.Paciente, error) {
 	q := `
 	SELECT id_p, nombre, apellido, fecha_nac, direccion, telefono
 		FROM paciente
@@ -92,7 +92,7 @@ func (ur *PacienteRepository) Create(ctx context.Context, p *paciente.Paciente) 
 	return nil
 }
 
-func (ur *PacienteRepository) Update(ctx context.Context, id uint, p paciente.Paciente) error {
+func (ur *PacienteRepository) Update(ctx context.Context, id string, p paciente.Paciente) error {
 	q := `
     UPDATE paciente set nombre=$1, apellido=$2, fecha_nac=$3, direccion=$4, telefono=$5
         WHERE id_p=$6;
@@ -116,7 +116,7 @@ func (ur *PacienteRepository) Update(ctx context.Context, id uint, p paciente.Pa
 	return nil
 }
 
-func (ur *PacienteRepository) Delete(ctx context.Context, id uint) error {
+func (ur *PacienteRepository) Delete(ctx context.Context, id string) error {
 	q := `DELETE FROM paciente WHERE id_p=$1;`
 
 	stmt, err := ur.Data.DB.PrepareContext(ctx, q)

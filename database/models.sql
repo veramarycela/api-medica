@@ -30,7 +30,7 @@ CREATE TABLE IF NOT EXISTS historia (
     id_medico int NOT NULL,
     id_paciente VARCHAR NOT NULL,
     fecha DATE,
-    motivo TEXT,
+    motivo_consulta TEXT,
     diagnostico TEXT, 
     receta TEXT, 
     CONSTRAINT pk_historia PRIMARY KEY(id_h),

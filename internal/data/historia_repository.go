@@ -12,7 +12,7 @@ type HistoriaRepository struct {
 
 func (ur *HistoriaRepository) GetAll(ctx context.Context) ([]historia.Historia, error) {
 	q := `
-    SELECT id_h, id_paciente, id_medico, fecha, motivo, diagnostico, receta
+    SELECT id_h, id_paciente, id_medico, fecha, motivo_consulta, diagnostico, receta
         FROM historia;
     `
 
@@ -36,7 +36,7 @@ func (ur *HistoriaRepository) GetAll(ctx context.Context) ([]historia.Historia, 
 
 func (ur *HistoriaRepository) GetOne(ctx context.Context, id uint) (historia.Historia, error) {
 	q := `
-    SELECT id_h, id_paciente, id_medico, fecha, motivo, diagnostico, receta
+    SELECT id_h, id_paciente, id_medico, fecha, motivo_consulta, diagnostico, receta
         FROM historia
         WHERE id_h = $1;
     `
@@ -53,28 +53,28 @@ func (ur *HistoriaRepository) GetOne(ctx context.Context, id uint) (historia.His
 	return h, nil
 }
 
-func (ur *HistoriaRepository) GetByHistorianame(ctx context.Context, nombre string) (historia.Historia, error) {
-	q := `
-	SELECT id_h, id_paciente, id_medico, fecha, motivo, diagnostico, receta
-		FROM paciente
-        WHERE nombre = $1;
-    `
+// func (ur *HistoriaRepository) GetByHistorianombre(ctx context.Context, motivo string) (historia.Historia, error) {
+// 	q := `
+// 	SELECT id_h, id_paciente, id_medico, fecha, motivo, diagnostico, receta
+// 		FROM historia
+//         WHERE motivo = $1;
+//     `
 
-	row := ur.Data.DB.QueryRowContext(ctx, q, nombre)
+// 	row := ur.Data.DB.QueryRowContext(ctx, q, motivo)
 
-	var h historia.Historia
-	err := row.Scan(&h.ID, &h.Id_Paciente, &h.Id_Medico, &h.Fecha,
-		&h.Motivo, &h.Diagnostico, &h.Receta)
-	if err != nil {
-		return historia.Historia{}, err
-	}
+// 	var h historia.Historia
+// 	err := row.Scan(&h.ID, &h.Id_Paciente, &h.Id_Medico, &h.Fecha,
+// 		&h.Motivo, &h.Diagnostico, &h.Receta)
+// 	if err != nil {
+// 		return historia.Historia{}, err
+// 	}
 
-	return h, nil
-}
+// 	return h, nil
+// }
 
 func (ur *HistoriaRepository) Create(ctx context.Context, h *historia.Historia) error {
 	q := `
-    INSERT INTO historia (id_paciente, id_medico, fecha, motivo, diagnostico, receta)
+    INSERT INTO historia (id_paciente, id_medico, fecha, motivo_consulta, diagnostico, receta)
         VALUES ($1, $2, $3, $4, $5, $6, $7)
         RETURNING id_h;
     `
@@ -94,7 +94,7 @@ func (ur *HistoriaRepository) Create(ctx context.Context, h *historia.Historia) 
 
 func (ur *HistoriaRepository) Update(ctx context.Context, id uint, h historia.Historia) error {
 	q := `
-    UPDATE historia set id_paciente=$1, id_medico=$2, fecha=$3, motivo=$4, diagnostico=$6, receta=$6
+    UPDATE historia set id_paciente=$1, id_medico=$2, fecha=$3, motivo_consulta=$4, diagnostico=$6, receta=$6
 	WHERE id_h=$8;
     `
 

@@ -51,7 +51,7 @@ func (ur *EspecialidadRepository) GetOne(ctx context.Context, id uint) (especial
 	return e, nil
 }
 
-func (ur *EspecialidadRepository) GetByEspecialidadname(ctx context.Context, nombre string) (especialidad.Especialidad, error) {
+func (ur *EspecialidadRepository) GetByEspecialidadnombre(ctx context.Context, nombre string) (especialidad.Especialidad, error) {
 	q := `
 	SELECT id_e, nombre
 		FROM especialidad
