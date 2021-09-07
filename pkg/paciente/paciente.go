@@ -1,9 +1,7 @@
-// pkg/user/user.go
 package paciente
 
 import "time"
 
-// User of the system.
 type Paciente struct {
 	ID        string    `json:"id_p,omitempty"`
 	Nombre    string    `json:"nombre,omitempty"`

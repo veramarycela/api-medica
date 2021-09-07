@@ -2,7 +2,7 @@ package medico
 
 import "context"
 
-// Repository handle the CRUD operations with Users.
+// Repository handle the CRUD operations with Medico.
 type Repository interface {
 	GetAll(ctx context.Context) ([]Medico, error)
 	GetOne(ctx context.Context, id uint) (Medico, error)

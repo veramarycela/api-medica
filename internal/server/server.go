@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"github.com/go-chi/chi"
+	"github.com/go-chi/chi/middleware"
 	v1 "github.com/veramarycela/api-medica/internal/v1"
 )
 
@@ -24,6 +25,10 @@ func (serv *Server) Start() {
 // New inicialize a new server with configuration.
 func New(port string) (*Server, error) {
 	r := chi.NewRouter()
+
+	r.Use(middleware.Logger)
+	r.Use(middleware.Recoverer)
+
 	// API routes version 1.
 	r.Mount("/api/v1", v1.New())
 

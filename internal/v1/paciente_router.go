@@ -4,10 +4,13 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"os"
 
 	// "strconv"
 
 	"github.com/go-chi/chi"
+	"github.com/veramarycela/api-medica/internal/middleware"
+	"github.com/veramarycela/api-medica/pkg/claim"
 	"github.com/veramarycela/api-medica/pkg/paciente"
 	"github.com/veramarycela/api-medica/pkg/response"
 )
@@ -116,14 +119,66 @@ func (ur *PacienteRouter) DeleteHandler(w http.ResponseWriter, r *http.Request) 
 	response.JSON(w, r, http.StatusOK, response.Map{})
 }
 
+// func (ur *PacienteRouter) Routes() http.Handler {
+// 	r := chi.NewRouter()
+// 	// TODO: add routes.
+// 	r.Get("/", ur.GetAllHandler)
+// 	r.Post("/", ur.CreateHandler)
+// 	r.Get("/{id}", ur.GetOneHandler)
+// 	r.Put("/{id}", ur.UpdateHandler)
+// 	r.Delete("/{id}", ur.DeleteHandler)
+
+// 	return r
+// }
+
 func (ur *PacienteRouter) Routes() http.Handler {
 	r := chi.NewRouter()
-	// TODO: add routes.
+
 	r.Get("/", ur.GetAllHandler)
+
 	r.Post("/", ur.CreateHandler)
+
 	r.Get("/{id}", ur.GetOneHandler)
+
 	r.Put("/{id}", ur.UpdateHandler)
+
 	r.Delete("/{id}", ur.DeleteHandler)
 
+	r.With(middleware.Authorizator).Get("/", ur.GetAllHandler)
+
+	r.Post("/login/", ur.LoginHandler)
+
 	return r
+}
+
+func (ur *PacienteRouter) LoginHandler(w http.ResponseWriter, r *http.Request) {
+	var p paciente.Paciente
+	err := json.NewDecoder(r.Body).Decode(&p)
+	if err != nil {
+		response.HTTPError(w, r, http.StatusBadRequest, err.Error())
+		return
+	}
+
+	defer r.Body.Close()
+
+	ctx := r.Context()
+	storedPaciente, err := ur.Repository.GetByPacientenombre(ctx, p.Nombre)
+	if err != nil {
+		response.HTTPError(w, r, http.StatusNotFound, err.Error())
+		return
+	}
+
+	// if !storedPaciente.PasswordMatch(p.Password) {
+	// 	response.HTTPError(w, r, http.StatusBadRequest, "password don't match")
+	// 	return
+	// }
+
+	c := claim.Claim{ID: storedPaciente.ID}
+	token, err := c.GetToken(os.Getenv("SIGNING_STRING"))
+	if err != nil {
+		response.HTTPError(w, r, http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	response.JSON(w, r, http.StatusOK, response.Map{"token": token})
 }

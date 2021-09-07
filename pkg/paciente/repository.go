@@ -3,7 +3,7 @@ package paciente
 
 import "context"
 
-// Repository handle the CRUD operations with Users.
+// Repository handle the CRUD operations with Paciente.
 type Repository interface {
 	GetAll(ctx context.Context) ([]Paciente, error)
 	GetOne(ctx context.Context, id string) (Paciente, error)

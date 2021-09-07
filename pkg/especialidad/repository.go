@@ -2,7 +2,7 @@ package especialidad
 
 import "context"
 
-// Repository handle the CRUD operations with Users.
+// Repository handle the CRUD operations with especialidad
 type Repository interface {
 	GetAll(ctx context.Context) ([]Especialidad, error)
 	GetOne(ctx context.Context, id uint) (Especialidad, error)
