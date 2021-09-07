@@ -33,7 +33,7 @@ func (ur *EspecialidadRepository) GetAll(ctx context.Context) ([]especialidad.Es
 	return especialidads, nil
 }
 
-func (ur *EspecialidadRepository) GetOne(ctx context.Context, id uint) (especialidad.Especialidad, error) {
+func (ur *EspecialidadRepository) GetOne(ctx context.Context, id string) (especialidad.Especialidad, error) {
 	q := `
     SELECT id_e, nombre
         FROM especialidad
@@ -88,7 +88,7 @@ func (ur *EspecialidadRepository) Create(ctx context.Context, e *especialidad.Es
 	return nil
 }
 
-func (ur *EspecialidadRepository) Update(ctx context.Context, id uint, e especialidad.Especialidad) error {
+func (ur *EspecialidadRepository) Update(ctx context.Context, id string, e especialidad.Especialidad) error {
 	q := `
     UPDATE especialidad set nombre=$1
         WHERE id_e=$2;
@@ -111,7 +111,7 @@ func (ur *EspecialidadRepository) Update(ctx context.Context, id uint, e especia
 	return nil
 }
 
-func (ur *EspecialidadRepository) Delete(ctx context.Context, id uint) error {
+func (ur *EspecialidadRepository) Delete(ctx context.Context, id string) error {
 	q := `DELETE FROM especialidad WHERE id_e=$1;`
 
 	stmt, err := ur.Data.DB.PrepareContext(ctx, q)

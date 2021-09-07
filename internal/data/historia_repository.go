@@ -34,7 +34,7 @@ func (ur *HistoriaRepository) GetAll(ctx context.Context) ([]historia.Historia, 
 	return historias, nil
 }
 
-func (ur *HistoriaRepository) GetOne(ctx context.Context, id uint) (historia.Historia, error) {
+func (ur *HistoriaRepository) GetOne(ctx context.Context, id string) (historia.Historia, error) {
 	q := `
     SELECT id_h, id_paciente, id_medico, fecha, motivo_consulta, diagnostico, receta
         FROM historia
@@ -92,7 +92,7 @@ func (ur *HistoriaRepository) Create(ctx context.Context, h *historia.Historia) 
 	return nil
 }
 
-func (ur *HistoriaRepository) Update(ctx context.Context, id uint, h historia.Historia) error {
+func (ur *HistoriaRepository) Update(ctx context.Context, id string, h historia.Historia) error {
 	q := `
     UPDATE historia set id_paciente=$1, id_medico=$2, fecha=$3, motivo_consulta=$4, diagnostico=$6, receta=$6
 	WHERE id_h=$8;
@@ -116,7 +116,7 @@ func (ur *HistoriaRepository) Update(ctx context.Context, id uint, h historia.Hi
 	return nil
 }
 
-func (ur *HistoriaRepository) Delete(ctx context.Context, id uint) error {
+func (ur *HistoriaRepository) Delete(ctx context.Context, id string) error {
 	q := `DELETE FROM historia WHERE id_h=$1;`
 
 	stmt, err := ur.Data.DB.PrepareContext(ctx, q)

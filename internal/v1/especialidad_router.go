@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
-	"strconv"
 
 	// "strconv"
 
@@ -54,14 +53,14 @@ func (ur *EspecialidadRouter) GetAllHandler(w http.ResponseWriter, r *http.Reque
 func (ur *EspecialidadRouter) GetOneHandler(w http.ResponseWriter, r *http.Request) {
 	idStr := chi.URLParam(r, "id")
 
-	id, err := strconv.Atoi(idStr)
-	if err != nil {
-		response.HTTPError(w, r, http.StatusBadRequest, err.Error())
-		return
-	}
+	// id, err := strconv.Atoi(idStr)
+	// if err != nil {
+	// 	response.HTTPError(w, r, http.StatusBadRequest, err.Error())
+	// 	return
+	// }
 
 	ctx := r.Context()
-	e, err := ur.Repository.GetOne(ctx, uint(id))
+	e, err := ur.Repository.GetOne(ctx, idStr)
 	if err != nil {
 		response.HTTPError(w, r, http.StatusNotFound, err.Error())
 		return
@@ -73,14 +72,14 @@ func (ur *EspecialidadRouter) GetOneHandler(w http.ResponseWriter, r *http.Reque
 func (ur *EspecialidadRouter) UpdateHandler(w http.ResponseWriter, r *http.Request) {
 	idStr := chi.URLParam(r, "id")
 
-	id, err := strconv.Atoi(idStr)
-	if err != nil {
-		response.HTTPError(w, r, http.StatusBadRequest, err.Error())
-		return
-	}
+	// id, err := strconv.Atoi(idStr)
+	// if err != nil {
+	// 	response.HTTPError(w, r, http.StatusBadRequest, err.Error())
+	// 	return
+	// }
 
 	var e especialidad.Especialidad
-	err = json.NewDecoder(r.Body).Decode(&e)
+	err := json.NewDecoder(r.Body).Decode(&e)
 	if err != nil {
 		response.HTTPError(w, r, http.StatusBadRequest, err.Error())
 		return
@@ -89,7 +88,7 @@ func (ur *EspecialidadRouter) UpdateHandler(w http.ResponseWriter, r *http.Reque
 	defer r.Body.Close()
 
 	ctx := r.Context()
-	err = ur.Repository.Update(ctx, uint(id), e)
+	err = ur.Repository.Update(ctx, idStr, e)
 	if err != nil {
 		response.HTTPError(w, r, http.StatusNotFound, err.Error())
 		return
@@ -101,14 +100,14 @@ func (ur *EspecialidadRouter) UpdateHandler(w http.ResponseWriter, r *http.Reque
 func (ur *EspecialidadRouter) DeleteHandler(w http.ResponseWriter, r *http.Request) {
 	idStr := chi.URLParam(r, "id")
 
-	id, err := strconv.Atoi(idStr)
-	if err != nil {
-		response.HTTPError(w, r, http.StatusBadRequest, err.Error())
-		return
-	}
+	// id, err := strconv.Atoi(idStr)
+	// if err != nil {
+	// 	response.HTTPError(w, r, http.StatusBadRequest, err.Error())
+	// 	return
+	// }
 
 	ctx := r.Context()
-	err = ur.Repository.Delete(ctx, uint(id))
+	err := ur.Repository.Delete(ctx, idStr)
 	if err != nil {
 		response.HTTPError(w, r, http.StatusNotFound, err.Error())
 		return
